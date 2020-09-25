@@ -5,11 +5,31 @@
         <v-card-title>Добавление книги</v-card-title>
         <v-divider></v-divider>
         <v-container>
-          <v-form>
-            <v-text-field v-model="title" label="Название"></v-text-field>
-            <v-text-field v-model="author" label="Автор"></v-text-field>
-            <v-text-field v-model="count" label="Количество" type="number"></v-text-field>
-            <v-text-field v-model="year" label="Год издания" type="number"></v-text-field>
+          <v-form ref="form">
+            <v-text-field
+              v-model="title"
+              label="Название"
+              :rules="titleRules"
+            ></v-text-field>
+            <v-text-field
+              v-model="author"
+              label="Автор"
+              :rules="authorRules"
+            ></v-text-field>
+            <v-text-field
+              v-model="count"
+              label="Количество"
+              type="number"
+              min="1"
+            ></v-text-field>
+            <v-text-field
+              v-model="year"
+              label="Год издания"
+              type="number"
+              min="0"
+              max="2020"
+              :rules="yearRules"
+            ></v-text-field>
           </v-form>
         </v-container>
         <v-card-actions>
@@ -39,20 +59,43 @@ export default {
       book: {},
       title: "",
       author: "",
-      count: 0,
+      count: 1,
       year: "",
+      titleRules: [
+        (v) => !!v || "Введите название",
+        (v) =>
+          (v && v.length >= 1) ||
+          "Название должно быть как минимум длиной в 1 символ",
+      ],
+      authorRules: [
+        (v) => !!v || "Введите автора",
+        (v) =>
+          (v && v.length >= 1) ||
+          "Автор должен быть как минимум длиной в 1 символ",
+      ],
+      yearRules: [
+        (v) =>
+          +v <= new Date().getFullYear() ||
+          `Год издания не может привышать ${new Date().getFullYear()}`,
+      ],
     };
   },
   methods: {
     acceptAdd() {
-      this.book = {
-        title: this.title,
-        author: this.author,
-        count: +this.count,
-        year: moment(this.year, "YYYY").format(),
-      };
-      this.$emit("add-confirm", this.book);
-      this.clearFields();
+      if (this.$refs.form.validate()) {
+        this.book = {
+          title: this.title.trimStart(),
+          author: this.author.trimStart(),
+          count: +this.count,
+          year: moment(this.year, "YYYY").format(),
+        };
+        this.$refs.form.reset();
+        this.$emit("add-confirm", this.book);
+        this.clearFields();
+      }
+    },
+    disableRule() {
+      return this.title.trim().length === 0 || this.author.trim().length === 0;
     },
     denyAdd() {
       this.$emit("add-deny");

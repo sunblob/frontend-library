@@ -10,7 +10,7 @@
           <v-btn class="mx-2" fab dark color="indigo" @click="searchForBooks">
             <v-icon dark>mdi-magnify</v-icon>
           </v-btn>
-          <v-btn class="mx-2" fab dark color="indigo" @click="getBooks">
+          <v-btn class="mx-2" fab dark color="indigo" @click="clearFields">
             <v-icon dark>mdi-close-circle</v-icon>
           </v-btn>
         </v-row>
@@ -122,6 +122,7 @@ export default {
     },
     closeEditDialog() {
       this.editDialog = false;
+      this.currentBook = {};
     },
     async deleteConfirm(id) {
       await this.$axios
@@ -167,9 +168,9 @@ export default {
       this.closeAddDialog();
     },
     async getBooks() {
-      const { data } = await this.$axios.get("/books").catch(() => {
-        // console.log(e);
-        this.$toast.error("Не удалось загрузить книни");
+      const { data } = await this.$axios.get("/books").catch((e) => {
+        console.log(e);
+        this.$toast.error("Не удалось загрузить книги");
       });
       this.books = data;
       // console.log(this.books);
@@ -187,8 +188,12 @@ export default {
           this.books = res.data;
         })
         .catch(() => this.$toast.error("Ошибка в запросе"));
+    },
+    clearFields() {
       this.authorFilter = "";
       this.yearFilter = "";
+
+      this.getBooks();
     },
   },
   created() {
