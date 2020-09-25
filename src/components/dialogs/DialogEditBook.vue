@@ -21,6 +21,7 @@
               label="Количество"
               type="number"
               min="1"
+              :rules="countRules"
             ></v-text-field>
             <v-text-field
               v-model="year"
@@ -75,6 +76,9 @@ export default {
         (v) =>
           (v && v.trim().length != 0) ||
           "Имя автора не может состоять только из пробелов",
+      ],
+      countRules: [
+        (v) => (v && +v >= 1) || "Количество книг не может быть меньше 1",
       ],
       yearRules: [
         (v) =>
