@@ -9,9 +9,13 @@
       <v-col cols="4">
         <div v-for="reader in readers" :key="reader.id">
           <v-card color="ma-5" hover>
-            <v-card-title>{{reader.firstName}}</v-card-title>
-            <v-card-subtitle>{{reader.middleName}} {{reader.lastName}}</v-card-subtitle>
-            <v-card-text class="text-body-1">Адрес: {{reader.address}}</v-card-text>
+            <v-card-title>{{ reader.firstName }}</v-card-title>
+            <v-card-subtitle
+              >{{ reader.middleName }} {{ reader.lastName }}</v-card-subtitle
+            >
+            <v-card-text class="text-body-1"
+              >Адрес: {{ reader.address }}</v-card-text
+            >
             <v-card-actions>
               <v-btn color="primary" outlined @click="openEditDialog(reader)">
                 <span>Редактировать</span>
@@ -87,6 +91,7 @@ export default {
     },
     closeEditDialog() {
       this.dialogEditReader = false;
+      this.currentReader = {};
     },
     closeDeleteDialog() {
       this.dialogDeleteReader = false;

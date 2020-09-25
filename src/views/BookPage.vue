@@ -1,25 +1,33 @@
 <template>
   <v-container fluid>
     <v-row justify="space-between" class="ma-5">
-      <v-col cols="3">
+      <v-col cols="4">
         <v-row>
-          <v-text-field
-            v-model="authorFilter"
-            label="Поиск по автору"
-          ></v-text-field>
-          <v-btn class="mx-2" fab dark color="indigo" @click="searchForBooks">
-            <v-icon dark>mdi-magnify</v-icon>
-          </v-btn>
-          <v-btn class="mx-2" fab dark color="indigo" @click="clearFields">
-            <v-icon dark>mdi-close-circle</v-icon>
-          </v-btn>
+          <v-col cols="6" class="mb-n16">
+            <v-text-field
+              v-model="authorFilter"
+              label="Поиск по автору"
+              outlined
+            ></v-text-field>
+          </v-col>
+          <v-col cols="6">
+            <v-btn class="mx-2" fab dark color="indigo" @click="searchForBooks">
+              <v-icon dark>mdi-magnify</v-icon>
+            </v-btn>
+            <v-btn class="mx-2" fab dark color="indigo" @click="clearFields">
+              <v-icon dark>mdi-close-circle</v-icon>
+            </v-btn>
+          </v-col>
         </v-row>
         <v-row>
-          <v-text-field
-            v-model="yearFilter"
-            label="Поиск по году"
-            type="number"
-          ></v-text-field>
+          <v-col cols="6">
+            <v-text-field
+              v-model="yearFilter"
+              label="Поиск по году"
+              type="number"
+              outlined
+            ></v-text-field>
+          </v-col>
         </v-row>
       </v-col>
       <v-col cols="4" v-if="books.length > 0">

@@ -5,11 +5,27 @@
         <v-card-title>Редактирование читателя</v-card-title>
         <v-divider></v-divider>
         <v-container>
-          <v-form>
-            <v-text-field v-model="firstName" label="Имя"></v-text-field>
-            <v-text-field v-model="middleName" label="Фамилия"></v-text-field>
-            <v-text-field v-model="lastName" label="Отчество"></v-text-field>
-            <v-text-field v-model="address" label="Адрес"></v-text-field>
+          <v-form ref="form">
+            <v-text-field
+              v-model="firstName"
+              label="Имя"
+              :rules="textRules"
+            ></v-text-field>
+            <v-text-field
+              v-model="middleName"
+              label="Фамилия"
+              :rules="textRules"
+            ></v-text-field>
+            <v-text-field
+              v-model="lastName"
+              label="Отчество"
+              :rules="textRules"
+            ></v-text-field>
+            <v-text-field
+              v-model="address"
+              label="Адрес"
+              :rules="textRules"
+            ></v-text-field>
           </v-form>
         </v-container>
         <v-card-actions>
@@ -36,18 +52,30 @@ export default {
       middleName: "",
       lastName: "",
       address: "",
+      textRules: [
+        (v) => !!v || "Поле не может быть пустым",
+        (v) =>
+          (v && v.length >= 1) ||
+          "Поле должно быть как минимум длиной в 1 символ",
+        (v) =>
+          (v && v.trim().length != 0) ||
+          "Поле не может состоять только из пробелов",
+      ],
     };
   },
   methods: {
     acceptEdit() {
-      this.editedReader = {
-        ...this.reader,
-        firstName: this.firstName,
-        middleName: this.middleName,
-        lastName: this.lastName,
-        address: this.address,
-      };
+      if (this.$refs.form.validate()) {
+        this.editedReader = {
+          ...this.reader,
+          firstName: this.firstName.trimStart(),
+          middleName: this.middleName.trimStart(),
+          lastName: this.lastName.trimStart(),
+          address: this.address.trimStart(),
+        };
+      }
       this.$emit("edit-confirm", this.editedReader);
+      this.$refs.form.reset();
     },
     denyEdit() {
       this.$emit("edit-deny");
